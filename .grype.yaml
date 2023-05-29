@@ -1,0 +1,3 @@
+ignore:
+  # marked as won't fix
+  - vulnerability: CVE-2019-8457
