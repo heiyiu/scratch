@@ -1,4 +1,4 @@
-postgresql:
+pg:
   auth:
     username: user
     password: password

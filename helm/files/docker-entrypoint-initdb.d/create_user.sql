@@ -1,0 +1,3 @@
+CREATE USER apiuser WITH PASSWORD 'password';
+CREATE DATABASE spay;
+GRANT SELECT, INSERT, UPDATE ON spay.users TO apiuser;
