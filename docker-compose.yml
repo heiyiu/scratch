@@ -4,8 +4,15 @@ services:
   apiserver:
     build: .
     restart: on-failure
+    environment: 
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_user_password
+      # if removed, add db create statement in init.sql
+      POSTGRES_DB: spay
     ports:
       - "8000:80"
+    secrets:
+      - pg_user_password
     depends_on:
       - db
     links:
