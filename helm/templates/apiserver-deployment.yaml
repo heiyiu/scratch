@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apiserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: apiserver
+  template:
+    metadata:
+      labels:
+        name: apiserver
+    spec:
+      containers:
+      - name: apiserver
+        image: ghcr.io/heiyiu/scratch:v0.0.4
+        ports:
+        - containerPort: 80

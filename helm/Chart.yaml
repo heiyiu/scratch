@@ -1,0 +1,9 @@
+name: scrath-api-test
+description: A Helm Chart for deploying the test scratch app
+version: 0.0.1
+apiVersion: v2
+dependencies:
+- name: postgresql
+  version: 12.5.5
+  repository: https://charts.bitnami.com/bitnami
+  alias: pg
