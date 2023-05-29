@@ -1,0 +1,42 @@
+version: "3.9"
+
+services:
+  apiserver:
+    build: .
+    restart: on-failure
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    links:
+      - db:postgres
+    networks:
+      - sp_api
+  db:
+    image: docker.io/library/postgres:15.3
+    restart: always
+    environment: 
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_user_password
+      # if removed, add db create statement in init.sql
+      POSTGRES_DB: spay
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      # postgres initalization script default location
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    secrets:
+      - pg_user_password
+    networks:
+      - sp_api
+
+volumes:
+  postgres_data:
+
+secrets:
+  pg_user_password:
+    file: ./pg_user_password.txt
+
+networks:
+  sp_api:
