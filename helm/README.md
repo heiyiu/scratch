@@ -19,19 +19,25 @@ wget https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.21.0/ku
 tar -xvzf kubeseal-0.21.0-linux-amd64.tar.gz kubeseal
 sudo install -m 755 kubeseal /usr/local/bin/kubeseal
 ```
-After installing, create a secret for postgres user
+After installing, create a secrets for postgres init and access
 ```
-kubectl create secret generic pgpasssecret --dry-run=client --from-literal=postgres-password=YOURPGADMINPASSWORD -o json >pgpasssecret.json
-kubeseal <pgpasssecret.json >pgpasssealedsecret.json
-kubectl create -f pgpasssealedsecret.json
+set +o history
+kubectl create secret generic pgpasssecret --dry-run=client --from-literal=postgres-password=YOUR_PGADMIN_PASSWORD --from-literal=user-password=YOUR_USER_PASSWORD -o yaml >pgpasssecret.yaml
+set -o history
+kubeseal <pgpasssecret.yaml >pgpasssealedsecret.yaml
+kubectl create -f pgpasssealedsecret.yaml
+# Update the files/init.sql to have the same password as the same one as YOUR_USER_PASSWORD above
+kubectl create secret generic init-sealed --from-file=files/init.sql --dry-run=client -o yaml > init.yaml
+kubeseal --format=yaml < init.yaml > init-sealed.yaml
+kubectl create -f init-sealed.yaml
 ```
-ENCRYPTED_PG_PASS=$(echo -n "password" | kubeseal --raw --name apiusersecret --namespace default --scope cluster-wide --from-file=/dev/stdin)
-sed -i 's/apiuserpgpass:.*/apiuserpgpass: "'$ENCRYPTED_PG_PASS'"/' values.yaml
+
 
 ## Usage
 The installation has been tested on Ubuntu 22 and microk8s.
-For the sake of speed, we skipped the implementation of a load balancer and setting up ssl/tls.
+For the sake of speed, we skipped the implementation of a load balancer and setting up ssl/tls, as well as helm tests.
 These should be implemented before we go to production.
 ```
-helm install mychart . -f values.yaml 
+helm dependency build
+helm install mychartrelease . -f values.yaml 
 ```
