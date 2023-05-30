@@ -12,7 +12,7 @@ services:
       # should match the db alias set by link below
       POSTGRES_HOST: postgres
     ports:
-      - "8000:80"
+      - "8000:8080"
     secrets:
       - pg_user_password
     depends_on:
