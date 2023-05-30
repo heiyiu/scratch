@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apiserver
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: apiserver
+  template:
+    metadata:
+      labels:
+        name: apiserver
+    spec:
+      containers:
+      - name: apiserver
+        image: ghcr.io/heiyiu/scratch:v0.0.9
+        ports:
+        - containerPort: 8000
+        env:
+        - name: POSTGRES_USER
+          # should match ../files/init.sql for user name 
+          value: apiuser
+        - name: POSTGRES_DB
+          # should match ../files/init.sql for databasename
+          value: spay
+        - name: POSTGRES_HOST
+          value: {{ .Release.Name }}-pg
+        - name: POSTGRES_PASSWORD # 
+          valueFrom:
+            secretKeyRef:
+              name: pgpasssecret # this should match the secret name used with kubeseal
+              key: user-password

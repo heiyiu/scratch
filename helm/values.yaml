@@ -1,0 +1,17 @@
+
+pg:
+  image:
+    debug: true
+  auth:
+    existingSecret: pgpasssecret
+  primary:
+    initdb:
+      scriptsSecret: init-sealed
+    extraVolumes:
+      - name: userdata-csv
+        configMap:
+          name: userdata-csv
+    extraVolumeMounts:
+      - name: userdata-csv
+        mountPath: /dbinit/userdata.csv
+        subPath: userdata.csv

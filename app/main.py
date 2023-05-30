@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 
-@app.post("/users/", response_model=schemas.User)
+@app.post("/users", response_model=schemas.User)
 def create_user(user: schemas.User, db: Session = Depends(get_db)):
     # Check if id and name already exists
     # Optional, can be removed if unnecessary
@@ -30,7 +30,7 @@ def create_user(user: schemas.User, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@app.get("/users/", response_model=list[schemas.User])
+@app.get("/users", response_model=list[schemas.User])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = crud.get_users(db, skip=skip, limit=limit)
     return users
