@@ -9,6 +9,8 @@ services:
       POSTGRES_PASSWORD_FILE: /run/secrets/pg_user_password
       # if removed, add db create statement in init.sql
       POSTGRES_DB: spay
+      # should match the db alias set by link below
+      POSTGRES_HOST: postgres
     ports:
       - "8000:80"
     secrets:
