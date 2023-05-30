@@ -7,5 +7,5 @@ Install helm
 
 
 ## Usage
-helm template mychart . --show-only templates/postgres-cm.yaml | kubectl apply -f - 
-helm install mychart . -f values.yaml  --set auth.postgresPassword=password
+# helm template mychart . --show-only templates/postgres-cm.yaml | kubectl apply -f - 
+helm install mychart . -f values.yaml  --set auth.postgresPassword=YOUR_ADMIN_PASSWORD

@@ -1,11 +1,17 @@
 pg:
-  auth:
-    username: user
-    password: password
-    database: spay
   image:
     debug: true
   primary:
+    initdb:
+      scripts:
+        create_user_and_load_data.sql: |
+          CREATE USER apiuser WITH PASSWORD 'password';
+          CREATE DATABASE spay;
+          \c spay;
+          CREATE TABLE users(id int, name VARCHAR(70), PRIMARY KEY (id));
+          CREATE INDEX name_idx ON users (name); 
+          GRANT SELECT, INSERT, UPDATE ON users TO apiuser;
+          \copy users (id, name) FROM '/dbinit/userdata.csv' WITH (FORMAT csv, HEADER true);
     extraVolumes:
       - name: userdata-csv
         configMap:
@@ -14,9 +20,3 @@ pg:
       - name: userdata-csv
         mountPath: /dbinit/userdata.csv
         subPath: userdata.csv
-    initdb:
-      scripts:
-        init.sql: |
-          CREATE TABLE users(id int, name VARCHAR(70), PRIMARY KEY (id));
-          CREATE INDEX name_idx ON users (name); 
-          COPY users (id, name) FROM '/dbinit/userdata.csv' WITH (FORMAT csv, HEADER true); 
