@@ -14,14 +14,16 @@ spec:
     spec:
       containers:
       - name: apiserver
-        image: ghcr.io/heiyiu/scratch:v0.0.5
+        image: ghcr.io/heiyiu/scratch:v0.0.6
         ports:
         - containerPort: 80
         env:
         - name: POSTGRES_USER
           value: apiuser
-        - name: POSTGRES_DATABASE
+        - name: POSTGRES_DB
           value: spay
+        - name: POSTGRES_HOST
+          value: {{ .Release.Name }}-pg
         - name: POSTGRES_PASSWORD # 
           valueFrom:
             secretKeyRef:
