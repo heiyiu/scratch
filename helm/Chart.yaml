@@ -7,6 +7,3 @@ dependencies:
   version: 12.5.5
   repository: https://charts.bitnami.com/bitnami
   alias: pg
-- name: sealed-secrets
-  version: 2.9.0
-  repository: https://bitnami-labs.github.io/sealed-secrets/
