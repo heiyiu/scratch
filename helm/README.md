@@ -20,13 +20,15 @@ kubeseal --fetch-cert \
 --controller-namespace=default \
 > pub-cert.pem
 
-echo -n YOUR_PASSWORD_HERE | kubectl create secret generic pgpasssecret --dry-run=client --from-file=foo=/dev/stdin -o json >pgpasssecret.json
-
+echo -n YOUR_PASSWORD_HERE | kubectl create secret generic pgpasssecret --dry-run=client --from-file=pgpass=/dev/stdin -o json >pgpasssecret.json
+kubeseal --controller-name mychart-sealed-secrets --controller-namespace default  <pgpasssecret.json >pgpasssealedsecret.json
+kubectl create -f pgpasssealedsecret.json
 ```
 
-The installation has been tested on Ubuntu 22
 
 
 ## Usage
-# helm template mychart . --show-only templates/postgres-cm.yaml | kubectl apply -f - 
+The installation has been tested on Ubuntu 22 and microk8s.
+```
 helm install mychart . -f values.yaml  --set auth.postgresPassword=YOUR_ADMIN_PASSWORD
+```

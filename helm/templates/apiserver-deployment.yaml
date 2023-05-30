@@ -14,6 +14,16 @@ spec:
     spec:
       containers:
       - name: apiserver
-        image: ghcr.io/heiyiu/scratch:v0.0.4
+        image: ghcr.io/heiyiu/scratch:v0.0.5
         ports:
         - containerPort: 80
+        env:
+        - name: POSTGRES_USER
+          value: apiuser
+        - name: POSTGRES_DATABASE
+          value: spay
+        - name: POSTGRES_PASSWORD # 
+          valueFrom:
+            secretKeyRef:
+              name: pgpasssecret # this should match the secret name used with kubeseal
+              key: pgpass # this should match the key name used with kubeseal
