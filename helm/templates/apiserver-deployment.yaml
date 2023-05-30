@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: apiserver
-        image: ghcr.io/heiyiu/scratch:v0.0.8
+        image: ghcr.io/heiyiu/scratch:v0.0.9
         ports:
         - containerPort: 8000
         env:
@@ -31,4 +31,3 @@ spec:
             secretKeyRef:
               name: pgpasssecret # this should match the secret name used with kubeseal
               key: user-password
-       

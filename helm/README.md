@@ -26,10 +26,13 @@ kubectl create secret generic pgpasssecret --dry-run=client --from-literal=postg
 set -o history
 kubeseal <pgpasssecret.yaml >pgpasssealedsecret.yaml
 kubectl create -f pgpasssealedsecret.yaml
+rm pgpasssecret.yaml
 # Update the files/init.sql to have the same password as the same one as YOUR_USER_PASSWORD above
+# Be sure to not commit changes to init.sql to git
 kubectl create secret generic init-sealed --from-file=files/init.sql --dry-run=client -o yaml > init.yaml
 kubeseal --format=yaml < init.yaml > init-sealed.yaml
 kubectl create -f init-sealed.yaml
+rm init.yaml
 ```
 
 
@@ -38,6 +41,6 @@ The installation has been tested on Ubuntu 22 and microk8s.
 For the sake of speed, we skipped the implementation of a load balancer and setting up ssl/tls, as well as helm tests.
 These should be implemented before we go to production.
 ```
-helm dependency build
+helm dependency update
 helm install mychartrelease . -f values.yaml 
 ```
